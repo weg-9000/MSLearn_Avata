@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Avatar Assistant</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1 id="pageTitle">AI Avatar Assistant</h1>
+
+    <div id="mainContainer">
+      <div id="buttonContainer">
+        <button id="stopSpeaking" onclick="stopSpeaking()" disabled>
+          Stop Speaking
+        </button>
+        <button id="clearChat" onclick="clearChatHistory()">Clear Chat</button>
+        <button id="stopSession" onclick="stopSession()" disabled>
+          Stop Session
+        </button>
+      </div>
+
+      <div id="videoContainer">
+        <div id="remoteVideo"></div>
+        <div id="subtitles" hidden></div>
+      </div>
+
+      <div id="chatInterface">
+        <div id="chatHistory"></div>
+        <div id="userInputContainer">
+          <div
+            id="userMessageBox"
+            contenteditable="true"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitQuery();}"
+          ></div>
+          <button id="submitButton" onclick="submitQuery()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk/distrib/browser/microsoft.cognitiveservices.speech.sdk.min.js"></script>
+    <script src="js/avatar.js"></script>
+    <script>
+      function submitQuery() {
+        const userMessageBox = document.getElementById("userMessageBox");
+        const query = userMessageBox.innerText.trim();
+        if (query) {
+          handleUserQuery(query);
+          userMessageBox.innerText = "";
+        }
+      }
+
+      window.onload = function () {
+        loadConfig().then(() => {
+          // 페이지 로드 시 자동으로 아바타 세션 시작
+          connectAvatar();
+        });
+      };
+    </script>
+  </body>
+</html>
